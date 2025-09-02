@@ -1,0 +1,116 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+
+#Ejercicio 1
+
+nombre = "Bryan Giraldo Quintero"
+correo = "Bryangiraldoq@gmail.com"
+cedula = int(457551)
+np.random.seed(cedula)
+
+#Parámetros distribución normal
+media = (cedula%10) + 2
+desviacion_Estandar = 2
+tamano_Muestra = 30
+mediana = np.median(ingresos)
+moda = stats.mode(ingresos[ingresos > 0], keepdims=True)[0][0]
+
+#Simulación de ingresos
+ingresos = np.random.normal(media, desviacion_Estandar, tamano_Muestra)
+
+#Reemplazo de valores negativos por 0
+ingresos = np.where(ingresos < 0, 0, ingresos)
+
+#Gráficar
+print("Medidas de tendencia central:")
+print(f"Media:   {media:.2f} ingresos")
+print(f"Mediana: {mediana:.2f} ingresos")
+print(f"Moda:    {moda:.2f} ingresos")
+
+plt.figure(figsize=(10, 5))
+sns.histplot(ingresos, bins=10, kde=False, color="#2F749F")
+
+# Líneas de tendencia central
+plt.axvline(media, color='red', linestyle='--', linewidth=2, label=f'Media: {media:.2f}')
+plt.axvline(mediana, color='green', linestyle='-', linewidth=2, label=f'Mediana: {mediana:.2f}')
+plt.axvline(moda, color='purple', linestyle=':', linewidth=2, label=f'Moda: {moda:.2f}')
+
+# Estética
+plt.title("Distribución de Ingresos Simulados", fontsize=14)
+plt.xlabel("Ingresos", fontsize=12)
+plt.ylabel("Frecuencia", fontsize=12)
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.5)
+plt.tight_layout()
+plt.show()
+
+#Ejercicio 2
+
+#Rango
+rango = np.max(ingresos) - np.min(ingresos)
+
+#Varianza
+varianza = np.var(ingresos, ddof=1)
+
+#Desviación Estándar
+desviacion_Estandar = np.std(ingresos, ddof=1)
+
+#Coeficiente de Variación
+coeficiente_Variacion = (desviacion_Estandar / media) * 100
+
+#Minimo
+minimo = np.min(ingresos)
+
+#Máximo
+maximo = np.max(ingresos)
+
+#Gráfica de Barras
+nombres = ['Rango', 'Varianza', 'Desviación Est.', 'Coef. Variación (%)']
+valores = [rango, varianza, desviacion_Estandar, coeficiente_Variacion]
+
+plt.figure(figsize=(10, 6))
+bars = plt.bar(nombres, valores, color='lightblue', edgecolor='black')
+
+# Agregar etiquetas numéricas sobre las barras
+for bar in bars:
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2, height,
+             f'{height:.2f}', ha='center', va='bottom')
+
+plt.title('Medidas de Dispersión de Ingresos Simulados')
+plt.ylabel('Valor')
+plt.grid(axis='y', linestyle='--', alpha=0.6)
+plt.tight_layout()
+plt.show()
+
+# Visualización
+sns.set_theme(style="whitegrid")
+plt.figure(figsize=(10, 6))
+sns.histplot(ingresos, bins=6, kde=True, color='skyblue')
+
+# Líneas verticales
+plt.axvline(media, color='green', linestyle='--', linewidth=2, label=f'Media = {media:.2f}')
+plt.axvline(media + desviacion_Estandar, color='purple', linestyle=':', linewidth=1.5, label=f'+1σ = {media + desviacion_Estandar:.2f}')
+plt.axvline(media - desviacion_Estandar, color='purple', linestyle=':', linewidth=1.5, label=f'-1σ = {media - desviacion_Estandar:.2f}')
+plt.axvline(minimo, color='red', linestyle='-', linewidth=1.5, label=f'Mínimo = {minimo}')
+plt.axvline(maximo, color='red', linestyle='-', linewidth=1.5, label=f'Máximo = {maximo}')
+
+# Título y etiquetas
+plt.title("Distribución de Ingresos Simulados")
+plt.xlabel("Ingresos")
+plt.ylabel("Frecuencia")
+plt.legend()
+
+# Recuadro con medidas
+texto = (
+    f"Rango: {rango}\n"
+    f"Varianza: {varianza:.2f}\n"
+    f"Desviación estándar: {desviacion_Estandar:.2f}\n"
+    f"Coef. de variación: {coeficiente_Variacion:.2f}"
+)
+plt.text(7.5, 3, texto, bbox=dict(facecolor='lightgreen', alpha=0.3), fontsize=10)
+
+plt.tight_layout()
+plt.show()
